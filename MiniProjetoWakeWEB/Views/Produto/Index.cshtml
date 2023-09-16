@@ -1,0 +1,264 @@
+﻿@using MiniProjetoWakeCore.Data.Models;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model List<Produto>;
+
+@{
+    var bootstrapCssUrl = "https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css";
+    var jqueryUrl = "https://code.jquery.com/jquery-3.6.0.min.js";
+    var bootstrapJsUrl = "https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js";
+    var dataTablesCssUrl = "https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css";
+    var dataTablesJsUrl = "https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js";
+    var inputMaskUrl = "https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js";
+}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Produtos</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="@bootstrapCssUrl">
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="@dataTablesCssUrl">
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-4">Lista de Produtos</h1>
+
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editarProdutoModal" id="criarProdutoButton">Criar Produto</button>
+
+        <table id="produtoTable" class="table mt-4">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Estoque</th>
+                    <th>Valor</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var produto in Model)
+                {
+                    <tr>
+                        <td>@produto.Nome</td>
+                        <td>@produto.Estoque</td>
+                        <td>@produto.Valor</td>
+                        <td>
+                            <a href="#" class="btn btn-sm btn-primary btn-editar" data-id="@produto.Id" data-nome="@produto.Nome" data-estoque="@produto.Estoque" data-valor="@produto.Valor" data-toggle="modal" data-target="#editarProdutoModal">Editar</a>
+                            <a href="#" class="btn btn-sm btn-danger btn-excluir" data-id="@produto.Id" data-toggle="modal" data-target="#deleteConfirmationModal">Excluir</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal de Confirmação de Exclusão -->
+    <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteConfirmationModalLabel">Confirmação de Exclusão</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Tem certeza de que deseja excluir este produto?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button id="confirmDeleteButton" class="btn btn-danger">Excluir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Edição/Criação -->
+    <div class="modal fade" id="editarProdutoModal" tabindex="-1" role="dialog" aria-labelledby="editarProdutoModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editarProdutoModalLabel">Editar Produto</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editarProdutoForm">
+                        <div class="form-group">
+                            <label for="editNome">Nome:</label>
+                            <input type="text" class="form-control" id="editNome" name="Nome" />
+                        </div>
+                        <div class="form-group">
+                            <label for="editEstoque">Estoque:</label>
+                            <input type="number" class="form-control" id="editEstoque" name="Estoque" />
+                        </div>
+                        <div class="form-group">
+                            <label for="editValor">Valor:</label>
+                            <input type="text" class="form-control" id="editValor" name="Valor" />
+                        </div>
+
+                        <!-- Botão de salvar -->
+                        <button type="button" class="btn btn-primary" id="salvarEdicao">Salvar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="@jqueryUrl"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="@bootstrapJsUrl"></script>
+
+    <!-- DataTables JS -->
+    <script src="@dataTablesJsUrl"></script>
+
+    <!-- Inclua a biblioteca inputmask via CDN -->
+    <script src="@inputMaskUrl"></script>
+
+
+    <script>
+        var urls = {
+            deleteAction: "@Url.Action("Deletar", "Produto")",
+            editOrCreateAction: "@Url.Action("CriaOuEdita", "Produto")"
+        };
+
+        $(document).ready(function () {
+            var productIdToDelete;
+            var produtoId;
+            var modoEdicao = false;
+
+            // Excluir Produto
+            $('.btn-excluir').on('click', function () {
+                productIdToDelete = $(this).data('id');
+            });
+
+            $('#confirmDeleteButton').on('click', function () {
+                if (productIdToDelete) {
+                    excluirProduto(productIdToDelete);
+                }
+            });
+
+            // Editar/Criar Produto
+            $('.btn-editar').on('click', function () {
+                produtoId = $(this).data('id');
+                var nome = $(this).data('nome');
+                var estoque = $(this).data('estoque');
+                var valorDecimal = parseFloat($(this).data('valor'));
+
+                var valorFormatado = valorDecimal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+                $('#editNome').val(nome);
+                $('#editEstoque').val(estoque);
+                $('#editValor').val(valorFormatado);
+                $('#editarProdutoModalLabel').text('Editar Produto');
+                modoEdicao = true;
+            });
+
+            $('#criarProdutoButton').on('click', function () {
+                $('#editarProdutoModalLabel').text('Criar Produto');
+            });
+
+            $('#salvarEdicao').on('click', function () {
+                var novoNome = $('#editNome').val();
+                var novoEstoque = $('#editEstoque').val();
+                var novoValor = $('#editValor').val();
+
+                if (validarCampos(novoNome, novoEstoque, novoValor)) {
+                    editarOuCriarProduto(produtoId, novoNome, novoEstoque, novoValor, modoEdicao);
+                }
+            });
+
+            // DataTables
+            var table = $('#produtoTable').DataTable({
+                "paging": true,
+                "ordering": true,
+                "info": true
+            });
+
+            $('#NomePesquisa').on('keyup', function () {
+                table.columns(0).search(this.value).draw();
+            });
+
+            $('#EstoquePesquisa').on('keyup', function () {
+                table.columns(1).search(this.value).draw();
+            });
+
+            $('#ValorPesquisa').on('keyup', function () {
+                table.columns(2).search(this.value).draw();
+            });
+
+            // Máscara de input para Valor
+            $('#editValor').inputmask('currency', {
+                alias: 'numeric',
+                radixPoint: ',',
+                groupSeparator: '.',
+                autoGroup: true,
+                prefix: 'R$ ',
+                rightAlign: false
+            });
+
+            function validarCampos(nome, estoque, valor) {
+                // Implemente a validação dos campos aqui
+                return nome && estoque && valor;
+            }
+
+            function excluirProduto(id) {
+                $.ajax({
+                    type: "POST",
+                    url: urls.deleteAction,
+                    data: { id: id },
+                    success: function (result) {
+                        if (result) {
+                            location.reload();
+                        } else {
+                            alert("Erro ao excluir o produto. Por favor, tente novamente.");
+                        }
+                    },
+                    error: function () {
+                        alert("Ocorreu um erro durante a exclusão do produto. Por favor, tente novamente.");
+                    }
+                });
+            }
+
+            function editarOuCriarProduto(id, nome, estoque, valor, edicao) {
+                var dados = {
+                    Id: id,
+                    Nome: nome,
+                    Estoque: estoque,
+                    Valor: valor,
+                    Edicao: edicao,
+                };
+
+                $.ajax({
+                    type: 'PATCH',
+                    url: urls.editOrCreateAction,
+                    data: JSON.stringify(dados),
+                    contentType: 'application/json',
+                    success: function (result) {
+                        if (result) {
+                            location.reload();
+                        } else {
+                            alert("Erro ao salvar as alterações do produto. Por favor, tente novamente.");
+                        }
+                    },
+                    error: function (result) {
+                        if (result.responseText != null && result.responseText.startsWith("Erro: ")) {
+                            alert("Erro: " + result.responseText);
+                        } else {
+                            alert("Erro ao salvar as alterações do produto. Por favor, tente novamente.");
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>
