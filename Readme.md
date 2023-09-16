@@ -48,11 +48,13 @@ Antes de executar o projeto, certifique-se de que você tenha os seguintes pré-
 
 1. Clone o repositório para a sua máquina.
 
-2. Execute a aplicação do Core para configurar o banco de dados e as migrações.
+2. Abra o arquivo MiniProjetoWakeWEB.sln dentro do diretório MiniProjetoWakeWEB
 
-3. Inicie a o WebApp.
+3. Certifique-se de que o Visual Studio está apontando para o projeto de inicialização MiniProjetoWakeWEB
+   
+4. Inicie o projeto
 
-4. Acesse o WebApp no seu navegador e comece a interagir com o sistema para criar, atualizar, excluir e listar produtos.
+5. Acesse o WebApp no seu navegador e comece a interagir com o sistema para criar, atualizar, excluir e listar produtos.
 
 ## Contato
 
