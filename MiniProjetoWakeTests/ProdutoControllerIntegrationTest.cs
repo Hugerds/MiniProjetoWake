@@ -5,6 +5,7 @@ using System.Net.Http.Json;
 
 namespace MiniProjetoWakeTests
 {
+
     public class ProdutoControllerIntegrationTest : IClassFixture<WebApplicationFactory<Program>>
     {
         private readonly WebApplicationFactory<Program> _factory;
