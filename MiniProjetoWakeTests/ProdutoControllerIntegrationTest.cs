@@ -108,9 +108,6 @@ namespace MiniProjetoWakeTests
             // Verifique se o corpo da resposta está válido, deve ser um tipo Produto
             var content = await response.Content.ReadFromJsonAsync<Produto>();
             Assert.NotNull(content);
-
-            // Deleta Produto
-            await client.DeleteAsync($"/api/Produto?id={content.Id}");
         }
 
         [Fact]
