@@ -125,6 +125,9 @@ namespace MiniProjetoWakeTests
             var response = await client.PostAsJsonAsync("/api/Produto", produto);
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+            // Deleta Produto
+            await client.DeleteAsync($"/api/Produto?id={content.Id}");
         }
 
         [Fact]
