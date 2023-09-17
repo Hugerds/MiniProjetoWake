@@ -15,11 +15,24 @@ jobs:
 
     - name: Configurar o ambiente de teste
       run: |
+        # Defina a versão do .NET explicitamente
+        dotnet --version
         dotnet restore
-        dotnet tool install --global dotnet-ef --version 6.0
+
+        # Instale o Entity Framework Core localmente
+        dotnet tool install dotnet-ef --version 6.0.100 --local
+
+        # Verifique se o arquivo global.json está presente e use-o se existir
+        if [ -f "global.json" ]; then
+          dotnet --info
+          dotnet build
+        fi
       shell: bash
 
     - name: Executar testes de unidade e integração
       run: |
         dotnet test MiniProjetoWakeTests/MiniProjetoWakeTests.csproj --no-restore --verbosity normal
       shell: bash
+
+    - name: Limpar o cache do NuGet
+      run: dotnet nuget locals all --clear
