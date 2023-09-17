@@ -59,7 +59,13 @@
     <div class="container">
         <h1 class="my-4">Lista de Produtos</h1>
 
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editarProdutoModal" id="criarProdutoButton">Criar Produto</button>
+        <div class="d-flex justify-content-between align-items-start mb-3">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editarProdutoModal" id="criarProdutoButton">Criar Produto</button>
+
+            <div id="produtoTable_filter" class="dataTables_filter">
+                <input type="search" class="form-control" id="NomePesquisa" placeholder="Pesquisar por nome" aria-controls="produtoTable">
+            </div>
+        </div>
 
         <table id="produtoTable" class="table mt-4">
             <thead>
@@ -76,7 +82,7 @@
                     <tr>
                         <td>@produto.Nome</td>
                         <td>@produto.Estoque</td>
-                        <td>@produto.Valor</td>
+                        <td>R$ @produto.Valor</td>
                         <td>
                             <a href="#" class="btn btn-sm btn-primary btn-editar" data-id="@produto.Id" data-nome="@produto.Nome" data-estoque="@produto.Estoque" data-valor="@produto.Valor" data-toggle="modal" data-target="#editarProdutoModal">Editar</a>
                             <a href="#" class="btn btn-sm btn-danger btn-excluir" data-id="@produto.Id" data-toggle="modal" data-target="#deleteConfirmationModal">Excluir</a>
@@ -211,14 +217,17 @@
                 "paging": true,
                 "ordering": true,
                 "info": true,
+                "dom": 'lrt',
+                "aoColumnDefs": [{ "bSortable": false, "aTargets": [ 3 ] }],
                 "language": {
                     "url": "https://cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json"
                 }
             });
 
             $('#NomePesquisa').on('keyup', function () {
-                table.columns(0).search(this.value).draw();
+                table.columns(0).search('^' + this.value, true, false).draw();
             });
+
 
             // Máscara de input para Valor
             $('#editValor').inputmask('currency', {

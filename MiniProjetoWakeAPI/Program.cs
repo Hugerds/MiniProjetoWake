@@ -11,8 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
                 .AddDbContext<MiniProjetoWakeContext>(
-                    options => options.UseSqlServer(
-                        builder.Configuration.GetConnectionString("MiniProjetoWakeAPIConnection")));
+                    options => options.UseSqlite(
+                        builder.Configuration.GetConnectionString("MiniProjetoWakeAPIConnection")!));
 
 // Add services to the container.
 
@@ -44,6 +44,10 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddHostedService<CriacaoProdutoService>();
 var app = builder.Build();
+
+using var scope = builder.Services.BuildServiceProvider().CreateScope();
+var dbContext = scope.ServiceProvider.GetRequiredService<MiniProjetoWakeContext>();
+dbContext.Database.Migrate();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

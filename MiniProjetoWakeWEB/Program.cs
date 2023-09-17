@@ -12,13 +12,17 @@ builder.Services.AddRazorPages();
 
 builder.Services
                 .AddDbContext<MiniProjetoWakeContext>(
-                    options => options.UseSqlServer(
-                        builder.Configuration.GetConnectionString("MiniProjetoWakeWEBConnection")));
+                    options => options.UseSqlite(
+                        builder.Configuration.GetConnectionString("MiniProjetoWakeWEBConnection")!));
 
 builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
 
 builder.Services.AddHostedService<CriacaoProdutoService>();
 var app = builder.Build();
+
+using var scope = builder.Services.BuildServiceProvider().CreateScope();
+var dbContext = scope.ServiceProvider.GetRequiredService<MiniProjetoWakeContext>();
+dbContext.Database.Migrate();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

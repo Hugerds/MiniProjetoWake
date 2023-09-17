@@ -13,8 +13,6 @@ namespace MiniProjetoWakeCore.Data.Models.Base
         public DateTime DataAtualizacao { get; set; } = DateTime.Now;
         [Required(ErrorMessage = "O campo Excluido é obrigatório.")]
         public bool Excluido { get; set; } = false;
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Codigo { get; set; }
         public bool ValidaCampos(out ICollection<ValidationResult> results)
         {
             var context = new ValidationContext(this, serviceProvider: null, items: null);

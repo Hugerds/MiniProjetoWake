@@ -3,8 +3,6 @@ using MiniProjetoWakeCore.Data.Repositories.Interfaces;
 using MiniProjetoWakeCore.Data.Models.Base;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using MiniProjetoWakeCore;
-using Microsoft.IdentityModel.Tokens;
 
 namespace MiniProjetoWakeCore.Data.Repositories.Base
 {
@@ -53,7 +51,7 @@ namespace MiniProjetoWakeCore.Data.Repositories.Base
                 else
                 {
                     modelNoBanco = mapper.Map(model, modelNoBanco);
-                    _context.Set<T>().Update(modelNoBanco).Property(x => x.Codigo).IsModified = false;
+                    _context.Set<T>().Update(modelNoBanco);
                 }
                 await _context.SaveChangesAsync();
                 return await BuscaPorId(model.Id);
@@ -97,7 +95,7 @@ namespace MiniProjetoWakeCore.Data.Repositories.Base
                     throw new Exception();
                 }
                 modelNoBanco = mapper.Map(model, modelNoBanco);
-                _context.Set<T>().Update(modelNoBanco).Property(x => x.Codigo).IsModified = false;
+                _context.Set<T>().Update(modelNoBanco);
                 _context.SaveChanges();
                 return await BuscaPorId(model.Id);
             }
