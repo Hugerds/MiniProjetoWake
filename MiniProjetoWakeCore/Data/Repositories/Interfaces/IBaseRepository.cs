@@ -9,9 +9,9 @@ namespace MiniProjetoWakeCore.Data.Repositories.Interfaces
         Task<T> Cria(T model);
         Task<T> CriaOuEdita(T model);
         Task<T> Edita(T model);
-        Task<bool> Deletar(Guid id);
+        Task<bool> Deleta(Guid id);
         IEnumerable<T> BuscaPorDataAtualizacao(DateTime? dataAtualizacao);
-        IEnumerable<T> BuscarComFiltroOrdenacao(string ordenarPor, bool ascendente, string? filtrarPor = null, object? valorFiltro = null);
+        IEnumerable<T> BuscarComFiltroOrdenacao(string ordenarPor, bool ascendente, string? filtrarPor = null, string? valorFiltro = null);
         List<string> BuscaCamposClasse();
     }
 }

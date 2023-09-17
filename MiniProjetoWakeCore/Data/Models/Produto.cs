@@ -16,12 +16,5 @@ namespace MiniProjetoWakeCore.Data.Models
         [Required(ErrorMessage = "O campo Valor é obrigatório.")]
         [Range(0.01, double.MaxValue, ErrorMessage = "O valor do produto deve ser maior ou igual a 0.01.")]
         public decimal Valor { get; set; }
-        public bool ValidaProduto(out ICollection<ValidationResult> results)
-        {
-            var context = new ValidationContext(this, serviceProvider: null, items: null);
-            results = new List<ValidationResult>();
-
-            return Validator.TryValidateObject(this, context, results, true);
-        }
     }
 }

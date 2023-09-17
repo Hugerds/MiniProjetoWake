@@ -15,5 +15,12 @@ namespace MiniProjetoWakeCore.Data.Models.Base
         public bool Excluido { get; set; } = false;
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Codigo { get; set; }
+        public bool ValidaCampos(out ICollection<ValidationResult> results)
+        {
+            var context = new ValidationContext(this, serviceProvider: null, items: null);
+            results = new List<ValidationResult>();
+
+            return Validator.TryValidateObject(this, context, results, true);
+        }
     }
 }

@@ -4,6 +4,7 @@ using MiniProjetoWakeCore.Data.Models.Base;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using MiniProjetoWakeCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace MiniProjetoWakeCore.Data.Repositories.Base
 {
@@ -63,7 +64,7 @@ namespace MiniProjetoWakeCore.Data.Repositories.Base
             }
         }
 
-        public async Task<bool> Deletar(Guid id)
+        public async Task<bool> Deleta(Guid id)
         {
             try
             {
@@ -117,7 +118,7 @@ namespace MiniProjetoWakeCore.Data.Repositories.Base
         /// <param name="filtrarPor">Campo para filtro.</param>
         /// <param name="valorFiltro">Valor para filtro.</param>
         /// <returns>Uma coleção de entidades ordenada e filtrada.</returns>
-        public IEnumerable<T> BuscarComFiltroOrdenacao(string ordenarPor, bool ascendente, string? filtrarPor = null, object? valorFiltro = null)
+        public IEnumerable<T> BuscarComFiltroOrdenacao(string ordenarPor, bool ascendente, string? filtrarPor = null, string? valorFiltro = null)
         {
             var camposValidos = BuscaCamposClasse();
             // Validação de parâmetros
@@ -131,7 +132,7 @@ namespace MiniProjetoWakeCore.Data.Repositories.Base
                 throw new Exception("Campo de filtro inválido");
             }
 
-            var itens = BuscaTodos().AsQueryable();
+            var itens = BuscaTodos().AsQueryable() ?? throw new Exception("Nenhum item encontrado");
 
             // Expressão lambda para ordenação
             var parameter = Expression.Parameter(typeof(T), "x");

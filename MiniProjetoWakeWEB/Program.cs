@@ -18,7 +18,6 @@ builder.Services
 builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
 
 builder.Services.AddHostedService<CriacaoProdutoService>();
-builder.Services.AddRazorPages(o => o.Conventions.AddPageRoute("/Produtos", ""));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

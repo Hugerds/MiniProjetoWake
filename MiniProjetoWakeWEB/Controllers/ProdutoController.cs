@@ -71,7 +71,7 @@ namespace MiniProjetoWakeWEB.Controllers
                 Estoque = produtoViewModel.Estoque,
                 Valor = decimal.Parse(produtoViewModel.Valor.Replace("R$ ", "").Replace(".", ""), new CultureInfo("pt-BR"))
             };
-            if (!produto.ValidaProduto(out ICollection<ValidationResult> results))
+            if (!produto.ValidaCampos(out ICollection<ValidationResult> results))
             {
                 var resultadoComJoinString = string.Join("\n", results.Select(x => x.ErrorMessage));
                 return BadRequest("Erro: " + resultadoComJoinString);

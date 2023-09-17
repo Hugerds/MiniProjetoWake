@@ -1,0 +1,26 @@
+name: Testes de Unidade e Integração
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout do código
+      uses: actions/checkout@v2
+
+    - name: Configurar o ambiente de teste
+      run: |
+        dotnet restore
+        dotnet tool install --global dotnet-ef --version 6.0
+        cd MiniProjetoWakeTests
+      shell: bash
+
+    - name: Executar testes de unidade e integração
+      run: |
+        dotnet test --no-restore --verbosity normal
+      shell: bash

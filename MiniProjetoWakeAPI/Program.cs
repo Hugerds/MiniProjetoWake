@@ -63,4 +63,4 @@ app.UseMiddleware<AuthorizationMiddleware>();
 app.MapControllers();
 
 app.Run();
-
+public partial class Program { }

@@ -48,9 +48,9 @@ Antes de executar o projeto, certifique-se de que você tenha os seguintes pré-
 
 1. Clone o repositório para a sua máquina.
 
-2. Abra o arquivo MiniProjetoWakeWEB.sln dentro do diretório MiniProjetoWakeWEB
+2. Abra o arquivo MiniProjetoWake.sln
 
-3. Certifique-se de que o Visual Studio está apontando para o projeto de inicialização MiniProjetoWakeWEB
+3. Certifique-se de que o Visual Studio está com o projeto de inicialização definido como MiniProjetoWakeWEB
    
 4. Inicie o projeto
 

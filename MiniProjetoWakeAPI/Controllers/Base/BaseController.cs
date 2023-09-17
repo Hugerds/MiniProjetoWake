@@ -19,22 +19,22 @@ namespace MiniProjetoWakeAPI.Controllers.Base
             try
             {
                 var repository = _scopeFactory.CreateScope().ServiceProvider.GetService<TRepository>() ?? throw new Exception();
-                var resuiltado = repository.BuscaPorDataAtualizacao(dataAtualizacao);
-                return Ok(resuiltado);
+                var resultado = repository.BuscaPorDataAtualizacao(dataAtualizacao);
+                return Ok(resultado);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet("BuscaTodos")]
+        [HttpGet]
         public IActionResult BuscaTodos()
         {
             try
             {
                 var repository = _scopeFactory.CreateScope().ServiceProvider.GetService<TRepository>() ?? throw new Exception();
-                var resuiltado = repository.BuscaTodos();
-                return Ok(resuiltado);
+                var resultado = repository.BuscaTodos();
+                return Ok(resultado);
             }
             catch (Exception ex)
             {
@@ -47,8 +47,8 @@ namespace MiniProjetoWakeAPI.Controllers.Base
             try
             {
                 var repository = _scopeFactory.CreateScope().ServiceProvider.GetService<TRepository>() ?? throw new Exception();
-                var resuiltado = await repository.CriaOuEdita(entity);
-                return Ok(resuiltado);
+                var resultado = await repository.CriaOuEdita(entity);
+                return Ok(resultado);
             }
             catch (Exception ex)
             {
@@ -61,8 +61,9 @@ namespace MiniProjetoWakeAPI.Controllers.Base
             try
             {
                 var repository = _scopeFactory.CreateScope().ServiceProvider.GetService<TRepository>() ?? throw new Exception();
-                var resuiltado = await repository.Cria(entity);
-                return Ok(resuiltado);
+                if (!entity.ValidaCampos(out var result)) return BadRequest(result);
+                var resultado = await repository.Cria(entity);
+                return Ok(resultado);
             }
             catch (Exception ex)
             {
@@ -75,8 +76,8 @@ namespace MiniProjetoWakeAPI.Controllers.Base
             try
             {
                 var repository = _scopeFactory.CreateScope().ServiceProvider.GetService<TRepository>() ?? throw new Exception();
-                var resuiltado = await repository.Edita(entity);
-                return Ok(resuiltado);
+                var resultado = await repository.Edita(entity);
+                return Ok(resultado);
             }
             catch (Exception ex)
             {
@@ -84,13 +85,28 @@ namespace MiniProjetoWakeAPI.Controllers.Base
             }
         }
         [HttpGet("BuscarComFiltroOrdenacao")]
-        public IActionResult BuscarComFiltroOrdenacao(string ordenarPor, bool ascendente, string? filtrarPor = null, object? valorFiltro = null)
+        public IActionResult BuscarComFiltroOrdenacao(string ordenarPor, bool ascendente, string? filtrarPor = null, string? valorFiltro = null)
         {
             try
             {
                 var repository = _scopeFactory.CreateScope().ServiceProvider.GetService<TRepository>() ?? throw new Exception();
-                var resuiltado = repository.BuscarComFiltroOrdenacao(ordenarPor, ascendente, filtrarPor, valorFiltro);
-                return Ok(resuiltado);
+                var resultado = repository.BuscarComFiltroOrdenacao(ordenarPor, ascendente, filtrarPor, valorFiltro);
+                return Ok(resultado);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpDelete]
+        public async Task<IActionResult> Deleta(Guid id)
+        {
+            try
+            {
+                var repository = _scopeFactory.CreateScope().ServiceProvider.GetService<TRepository>() ?? throw new Exception();
+                var resultado = await repository.Deleta(id);
+                if (!resultado) throw new Exception();
+                return Ok(resultado);
             }
             catch (Exception ex)
             {
