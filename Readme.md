@@ -28,6 +28,20 @@ O projeto foi desenvolvido com base nos seguintes requisitos funcionais:
 - **Utilizar o Entity Framework ou Dapper**
     - Utilizei Entity Framework com code-first
 
+## Bônus
+
+- **Utilizar padrões de projeto**
+  - Especificado mais adianta na seção Estrutura do Projeto
+    
+- **Utilizar github actions para os testes**
+  - Configurado para commits na branch master, executa o comando dotnet test
+    
+- **Incluir testes unitários**
+  - Inclusos e especificados mais adiante na seção Estrutura do Projeto
+    
+- **Incluir testes de integração**
+  - Inclusos e especificados mais adiante na seção Estrutura do Projeto
+
 ## Estrutura do Projeto
 
 O projeto está dividido em três partes principais:
