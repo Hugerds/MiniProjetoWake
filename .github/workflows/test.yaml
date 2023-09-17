@@ -17,10 +17,9 @@ jobs:
       run: |
         dotnet restore
         dotnet tool install --global dotnet-ef --version 6.0
-        cd MiniProjetoWakeTests
       shell: bash
 
     - name: Executar testes de unidade e integração
       run: |
-        dotnet test --no-restore --verbosity normal
+        dotnet test MiniProjetoWakeTests/MiniProjetoWakeTests.csproj --no-restore --verbosity normal
       shell: bash
