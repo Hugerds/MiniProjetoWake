@@ -32,11 +32,13 @@ O projeto foi desenvolvido com base nos seguintes requisitos funcionais:
 
 O projeto está dividido em três partes principais:
 
-- **Core:** Contém os repositories, migrations e context do banco de dados. Nesta camada, utilizei o padrão de projeto Repository para separar a lógica de acesso a dados do resto do código. Também faço uso da injeção de dependência para os repositories.
+- **MiniProjetoWakeCore:** Contém os repositories, migrations e context do banco de dados. Nesta camada, utilizei o padrão de projeto Repository para separar a lógica de acesso a dados do resto do código. Também faço uso da injeção de dependência para os repositories.
 
-- **API:** Responsável por fornecer as APIs para as operações CRUD de produtos, porém não é utilizada no projeto
+- **MiniProjetoWakeAPI:** Responsável por fornecer as APIs para as operações CRUD de produtos, é utilizada no projeto para os testes de integração
 
-- **WebApp:** Uma interface web que permite interagir com o sistema, realizando as operações CRUD de produtos com as validações especificadas. Utilizei o padrão de projeto MVC (Model-View-Controller) nesta camada para separar a lógica de negócios (Model), a apresentação (View) e o controle (Controller) do WebApp. Também faço uso da injeção de dependência para os repositories.
+- **MiniProjetoWakeWEB:** Uma interface web que permite interagir com o sistema, realizando as operações CRUD de produtos com as validações especificadas. Utilizei o padrão de projeto MVC (Model-View-Controller) nesta camada para separar a lógica de negócios (Model), a apresentação (View) e o controle (Controller) do WebApp. Também faço uso da injeção de dependência para os repositories.
+
+- **MiniProjetoWakeTests:** Testes unitários e de integração validando os requisitos funcionais especificados. Para os testes unitários tem um repositório mockado que utiliza a memória runtime da aplicação como armazenamento, para os testes de integração a comunicação é feita com o banco de dados do projeto.
 
 ## Pré-requisitos
 
