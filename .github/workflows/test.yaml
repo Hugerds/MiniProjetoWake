@@ -20,13 +20,7 @@ jobs:
         dotnet restore
 
         # Instale o Entity Framework Core localmente
-        dotnet tool install dotnet-ef --version 6.0.100 --local
-
-        # Verifique se o arquivo global.json está presente e use-o se existir
-        if [ -f "global.json" ]; then
-          dotnet --info
-          dotnet build
-        fi
+        dotnet tool install dotnet-ef --version 6.0.100 --local || true
       shell: bash
 
     - name: Executar testes de unidade e integração
