@@ -20,9 +20,16 @@ builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
 builder.Services.AddHostedService<CriacaoProdutoService>();
 var app = builder.Build();
 
-using var scope = builder.Services.BuildServiceProvider().CreateScope();
-var dbContext = scope.ServiceProvider.GetRequiredService<MiniProjetoWakeContext>();
-dbContext.Database.Migrate();
+try
+{
+    using var scope = builder.Services.BuildServiceProvider().CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<MiniProjetoWakeContext>();
+    dbContext.Database.Migrate();
+}
+catch (Exception ex)
+{
+    Console.WriteLine(ex.Message);
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
